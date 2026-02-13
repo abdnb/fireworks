@@ -143,7 +143,12 @@
         
         updateGreeting();
         
-        document.querySelector('.greeting').addEventListener('click', changeGreeting);
+        const greetingElement = document.querySelector('.greeting');
+        greetingElement.addEventListener('click', changeGreeting);
+        greetingElement.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            changeGreeting();
+        });
     </script>
     <script>
         const canvas = document.getElementById('fireworks');
