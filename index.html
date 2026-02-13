@@ -36,6 +36,40 @@
             z-index: 10;
             opacity: 0;
             animation: fadeIn 2s ease-in forwards;
+            max-width: 90%;
+        }
+        
+        .nav-buttons {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 2rem;
+            z-index: 20;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 179, 217, 0.3);
+            border: 2px solid rgba(255, 179, 217, 0.8);
+            color: #fff;
+            font-size: 1.5rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .nav-btn:active {
+            background: rgba(255, 179, 217, 0.6);
+            transform: scale(0.95);
         }
         
         .greeting h1 {
@@ -45,7 +79,6 @@
                          0 0 40px rgba(255, 179, 217, 0.6);
             margin-bottom: 1rem;
             animation: glow 2s ease-in-out infinite;
-            cursor: pointer;
         }
         
         .greeting p {
@@ -53,7 +86,6 @@
             font-size: 1.2rem;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
             line-height: 1.8;
-            cursor: pointer;
         }
         
         @keyframes fadeIn {
@@ -81,6 +113,11 @@
                 font-size: 1rem;
                 padding: 0 1rem;
             }
+            .nav-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -90,6 +127,11 @@
     <div class="greeting">
         <h1 id="title">🎊 新年快乐 🎊</h1>
         <p id="message">愿你在新的一年里<br>万事如意，心想事成<br>幸福安康，前程似锦</p>
+    </div>
+    
+    <div class="nav-buttons">
+        <button class="nav-btn" id="prevBtn">◀</button>
+        <button class="nav-btn" id="nextBtn">▶</button>
     </div>
 
     <script>
@@ -141,13 +183,29 @@
             updateGreeting();
         }
         
+        function prevGreeting() {
+            currentIndex = (currentIndex - 1 + greetings.length) % greetings.length;
+            updateGreeting();
+        }
+        
+        function nextGreeting() {
+            currentIndex = (currentIndex + 1) % greetings.length;
+            updateGreeting();
+        }
+        
         updateGreeting();
         
-        const greetingElement = document.querySelector('.greeting');
-        greetingElement.addEventListener('click', changeGreeting);
-        greetingElement.addEventListener('touchend', (e) => {
+        document.getElementById('prevBtn').addEventListener('click', prevGreeting);
+        document.getElementById('nextBtn').addEventListener('click', nextGreeting);
+        
+        document.getElementById('prevBtn').addEventListener('touchend', (e) => {
             e.preventDefault();
-            changeGreeting();
+            prevGreeting();
+        });
+        
+        document.getElementById('nextBtn').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            nextGreeting();
         });
     </script>
     <script>
