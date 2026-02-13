@@ -45,6 +45,7 @@
                          0 0 40px rgba(255, 179, 217, 0.6);
             margin-bottom: 1rem;
             animation: glow 2s ease-in-out infinite;
+            cursor: pointer;
         }
         
         .greeting p {
@@ -52,6 +53,7 @@
             font-size: 1.2rem;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
             line-height: 1.8;
+            cursor: pointer;
         }
         
         @keyframes fadeIn {
@@ -126,9 +128,22 @@
             }
         ];
         
-        const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-        document.getElementById('title').innerHTML = randomGreeting.title;
-        document.getElementById('message').innerHTML = randomGreeting.message;
+        let currentIndex = Math.floor(Math.random() * greetings.length);
+        
+        function updateGreeting() {
+            const randomGreeting = greetings[currentIndex];
+            document.getElementById('title').innerHTML = randomGreeting.title;
+            document.getElementById('message').innerHTML = randomGreeting.message;
+        }
+        
+        function changeGreeting() {
+            currentIndex = (currentIndex + 1) % greetings.length;
+            updateGreeting();
+        }
+        
+        updateGreeting();
+        
+        document.querySelector('.greeting').addEventListener('click', changeGreeting);
     </script>
     <script>
         const canvas = document.getElementById('fireworks');
