@@ -2,11 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>新年祝福</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择页面</title>
     <style>
         * {
             margin: 0;
@@ -15,306 +12,87 @@
         }
         
         body {
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             background: linear-gradient(to bottom, #2d1b4e 0%, #4a2c5e 50%, #6b4984 100%);
             font-family: 'Microsoft YaHei', sans-serif;
-            height: 100vh;
-            width: 100vw;
         }
         
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        
-        .greeting {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .container {
             text-align: center;
-            z-index: 10;
-            opacity: 0;
-            animation: fadeIn 2s ease-in forwards;
-            max-width: 90%;
+            color: white;
         }
         
-        .title-container {
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-shadow: 0 0 20px rgba(255, 179, 217, 0.8);
+        }
+        
+        .links {
             display: flex;
-            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
             justify-content: center;
-            gap: 1rem;
+        }
+        
+        .link-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 179, 217, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 200px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .link-card:hover {
+            background: rgba(255, 179, 217, 0.2);
+            border-color: rgba(255, 179, 217, 0.6);
+            transform: translateY(-5px);
+        }
+        
+        .link-card .emoji {
+            font-size: 3rem;
             margin-bottom: 1rem;
         }
         
-        .emoji-btn {
-            font-size: 3rem;
-            cursor: pointer;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            transition: transform 0.2s ease;
-            filter: drop-shadow(0 0 10px rgba(255, 179, 217, 0.6));
-        }
-        
-        .emoji-btn:active {
-            transform: scale(1.2);
-        }
-        
-        .greeting h1 {
-            color: #ffb3d9;
-            font-size: 2.5rem;
-            text-shadow: 0 0 20px rgba(255, 179, 217, 0.8),
-                         0 0 40px rgba(255, 179, 217, 0.6);
-            animation: glow 2s ease-in-out infinite;
-            margin: 0;
-        }
-        
-        .greeting p {
-            color: #fff;
+        .link-card .title {
             font-size: 1.2rem;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            line-height: 1.8;
-        }
-        
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-        
-        @keyframes glow {
-            0%, 100% {
-                text-shadow: 0 0 20px rgba(255, 179, 217, 0.8),
-                             0 0 40px rgba(255, 179, 217, 0.6);
-            }
-            50% {
-                text-shadow: 0 0 30px rgba(255, 179, 217, 1),
-                             0 0 60px rgba(255, 179, 217, 0.8);
-            }
+            font-weight: bold;
         }
         
         @media (max-width: 480px) {
-            .greeting h1 {
-                font-size: 1.5rem;
+            h1 {
+                font-size: 1.8rem;
             }
-            .greeting p {
-                font-size: 1rem;
-                padding: 0 1rem;
+            .links {
+                gap: 1rem;
             }
-            .emoji-btn {
-                font-size: 2rem;
+            .link-card {
+                width: 150px;
+                padding: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <canvas id="fireworks"></canvas>
-    
-    <div class="greeting">
-        <div class="title-container">
-            <span class="emoji-btn" id="prevEmoji">💖</span>
-            <h1 id="title">新年快乐</h1>
-            <span class="emoji-btn" id="nextEmoji">💖</span>
+    <div class="container">
+        <h1>✨ 选择一个页面 ✨</h1>
+        <div class="links">
+            <a href="/0/" class="link-card">
+                <div class="emoji">🎆</div>
+                <div class="title">烟花祝福</div>
+            </a>
+            <a href="/1/" class="link-card">
+                <div class="emoji">🎨</div>
+                <div class="title">页面 1</div>
+            </a>
         </div>
-        <p id="message">愿你在新的一年里<br>万事如意，心想事成<br>幸福安康，前程似锦</p>
     </div>
-
-    <script>
-        const greetings = [
-            {
-                title: '愿你永远少女心',
-                emoji: '💖',
-                message: '像星星一样闪耀<br>像花朵一样绽放<br>每一天都美好如初'
-            },
-            {
-                title: '做自己的小公主',
-                emoji: '🌸',
-                message: '愿你被世界温柔以待<br>永远保持热爱与期待<br>活成自己喜欢的样子'
-            },
-            {
-                title: '你值得所有美好',
-                emoji: '✨',
-                message: '愿你眼里有光，心中有爱<br>遇见温柔，收获浪漫<br>每天都是甜甜的一天'
-            },
-            {
-                title: '愿你永远可爱',
-                emoji: '🎀',
-                message: '像小猫一样慵懒<br>像棉花糖一样甜蜜<br>被爱包围，被宠上天'
-            },
-            {
-                title: '做个快乐的小仙女',
-                emoji: '🌙',
-                message: '愿你拥有好运气<br>遇见好天气和好心情<br>每一天都闪闪发光'
-            },
-            {
-                title: '愿你如花绽放',
-                emoji: '🦋',
-                message: '温柔且坚定，优雅又自信<br>活得精致，笑得灿烂<br>永远年轻，永远热泪盈眶'
-            },
-            {
-                title: '你是最特别的存在',
-                emoji: '💝',
-                message: '愿你被珍惜，被偏爱<br>有人懂你的小情绪<br>有人陪你看日落和星空'
-            },
-            {
-                title: '愿你永远热爱生活',
-                emoji: '🌺',
-                message: '喝奶茶不长胖<br>买买买不心疼<br>每天都是开心的小确幸'
-            }
-        ];
-        
-        let currentIndex = Math.floor(Math.random() * greetings.length);
-        
-        function updateGreeting() {
-            const randomGreeting = greetings[currentIndex];
-            document.getElementById('title').innerHTML = randomGreeting.title;
-            document.getElementById('message').innerHTML = randomGreeting.message;
-            document.getElementById('prevEmoji').innerHTML = randomGreeting.emoji;
-            document.getElementById('nextEmoji').innerHTML = randomGreeting.emoji;
-        }
-        
-        function changeGreeting() {
-            currentIndex = (currentIndex + 1) % greetings.length;
-            updateGreeting();
-        }
-        
-        function prevGreeting() {
-            currentIndex = (currentIndex - 1 + greetings.length) % greetings.length;
-            updateGreeting();
-        }
-        
-        function nextGreeting() {
-            currentIndex = (currentIndex + 1) % greetings.length;
-            updateGreeting();
-        }
-        
-        updateGreeting();
-        
-        document.getElementById('prevEmoji').addEventListener('click', prevGreeting);
-        document.getElementById('nextEmoji').addEventListener('click', nextGreeting);
-        
-        document.getElementById('prevEmoji').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            prevGreeting();
-        });
-        
-        document.getElementById('nextEmoji').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            nextGreeting();
-        });
-    </script>
-    <script>
-        const canvas = document.getElementById('fireworks');
-        const ctx = canvas.getContext('2d');
-        
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-        
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.velocity = {
-                    x: (Math.random() - 0.5) * 8,
-                    y: (Math.random() - 0.5) * 8
-                };
-                this.alpha = 1;
-                this.decay = Math.random() * 0.015 + 0.015;
-            }
-            
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-            
-            update() {
-                this.velocity.y += 0.1;
-                this.x += this.velocity.x;
-                this.y += this.velocity.y;
-                this.alpha -= this.decay;
-            }
-        }
-        
-        class Firework {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.particles = [];
-                this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
-                
-                for (let i = 0; i < 100; i++) {
-                    this.particles.push(new Particle(x, y, this.color));
-                }
-            }
-            
-            update() {
-                this.particles.forEach((particle, index) => {
-                    particle.update();
-                    particle.draw();
-                    
-                    if (particle.alpha <= 0) {
-                        this.particles.splice(index, 1);
-                    }
-                });
-            }
-        }
-        
-        let fireworks = [];
-        
-        function createFirework() {
-            const x = Math.random() * canvas.width;
-            const y = Math.random() * canvas.height * 0.6;
-            fireworks.push(new Firework(x, y));
-        }
-        
-        function animate() {
-            ctx.fillStyle = 'rgba(45, 27, 78, 0.1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            fireworks.forEach((firework, index) => {
-                firework.update();
-                
-                if (firework.particles.length === 0) {
-                    fireworks.splice(index, 1);
-                }
-            });
-            
-            requestAnimationFrame(animate);
-        }
-        
-        animate();
-        
-        setInterval(createFirework, 800);
-        
-        canvas.addEventListener('click', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            fireworks.push(new Firework(x, y));
-        });
-        
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
-            const touch = e.touches[0];
-            const x = touch.clientX - rect.left;
-            const y = touch.clientY - rect.top;
-            fireworks.push(new Firework(x, y));
-        });
-    </script>
 </body>
 </html>
