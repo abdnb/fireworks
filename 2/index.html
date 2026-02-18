@@ -112,6 +112,7 @@
             font-weight: 600;
             position: relative;
             overflow: hidden;
+            isolation: isolate;
         }
 
         .button::before {
@@ -122,18 +123,24 @@
             width: 0;
             height: 0;
             border-radius: 50%;
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.4);
             transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+            transition: width 0.6s ease-out, height 0.6s ease-out;
+            z-index: 0;
         }
 
         .button:active::before {
-            width: 300px;
-            height: 300px;
+            width: 400px;
+            height: 400px;
         }
 
         .button:active {
             transform: scale(0.95);
+        }
+        
+        .button span {
+            position: relative;
+            z-index: 1;
         }
 
         .balloon {
@@ -293,7 +300,7 @@
         <p class="message">愿你的每一天都充满欢笑与幸福</p>
         <p class="message" style="animation-delay: 1s;">愿所有美好如期而至</p>
         <button class="button" onclick="showWishes()">
-            <span style="position: relative; z-index: 1;">✨ 点击查看祝福 ✨</span>
+            <span>✨ 点击查看祝福 ✨</span>
         </button>
         <div class="wishes" id="wishes">
             <p>🌟 愿你前程似锦，梦想成真</p>
