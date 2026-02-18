@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐！</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            animation: fadeIn 1s ease-in;
+        }
+
+        h1 {
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        .message {
+            font-size: 1.5rem;
+            color: #fff;
+            margin: 20px 0;
+            opacity: 0;
+            animation: slideIn 1s ease-out 0.5s forwards;
+        }
+
+        .cake {
+            font-size: 8rem;
+            margin: 30px 0;
+            animation: rotate 3s ease-in-out infinite;
+        }
+
+        .button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .button:hover {
+            background: #ff5252;
+            transform: scale(1.1);
+        }
+
+        .balloon {
+            position: absolute;
+            font-size: 3rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            animation: fall 3s linear infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes rotate {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-100vh) translateX(50px);
+            }
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .wishes {
+            display: none;
+            color: white;
+            font-size: 1.3rem;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            animation: fadeIn 1s ease-in;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 生日快乐！🎉</h1>
+        <div class="cake">🎂</div>
+        <p class="message">愿你的每一天都充满欢笑与幸福</p>
+        <p class="message" style="animation-delay: 1s;">愿所有美好如期而至</p>
+        <button class="button" onclick="showWishes()">点击查看祝福</button>
+        <div class="wishes" id="wishes">
+            <p>🌟 愿你前程似锦，梦想成真</p>
+            <p>💖 愿你健康快乐，笑口常开</p>
+            <p>🎈 愿你岁岁平安，年年有余</p>
+            <p>✨ 生日快乐，永远年轻！</p>
+        </div>
+    </div>
+
+    <script>
+        // 创建气球
+        function createBalloons() {
+            const colors = ['🎈', '🎉', '🎊', '🎁', '⭐', '💝'];
+            for (let i = 0; i < 15; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.textContent = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.left = Math.random() * 100 + '%';
+                balloon.style.animationDelay = Math.random() * 3 + 's';
+                balloon.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                document.body.appendChild(balloon);
+            }
+        }
+
+        // 创建彩纸
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#fd79a8'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+            }
+        }
+
+        // 显示祝福
+        function showWishes() {
+            const wishes = document.getElementById('wishes');
+            wishes.style.display = 'block';
+            createConfetti();
+        }
+
+        // 页面加载时创建气球
+        window.onload = function() {
+            createBalloons();
+        };
+    </script>
+</body>
+</html>
