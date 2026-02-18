@@ -299,10 +299,7 @@
         </div>
         <p class="message">愿你的每一天都充满欢笑与幸福</p>
         <p class="message" style="animation-delay: 1s;">愿所有美好如期而至</p>
-        <button class="button" onclick="showWishes()">
-            <span>✨ 点击查看祝福 ✨</span>
-        </button>
-        <div class="wishes" id="wishes">
+        <div class="wishes" id="wishes" style="display: block;">
             <p>🌟 愿你前程似锦，梦想成真</p>
             <p>💖 愿你健康快乐，笑口常开</p>
             <p>🎈 愿你岁岁平安，年年有余</p>
@@ -405,13 +402,13 @@
             }
         }
 
-        // 显示祝福
-        function showWishes() {
-            const wishes = document.getElementById('wishes');
-            wishes.style.display = 'block';
+        // 页面加载
+        window.onload = function() {
+            createStars();
+            createBalloons();
             createConfetti();
             
-            // 随机位置创建烟花
+            // 延迟触发烟花
             setTimeout(() => {
                 for (let i = 0; i < 3; i++) {
                     setTimeout(() => {
@@ -419,24 +416,9 @@
                             Math.random() * window.innerWidth,
                             Math.random() * window.innerHeight * 0.5
                         );
-                    }, i * 300);
+                    }, i * 500);
                 }
-            }, 500);
-        }
-
-        // 页面加载
-        window.onload = function() {
-            createStars();
-            createBalloons();
-            
-            // 添加触摸反馈
-            document.querySelector('.button').addEventListener('touchstart', function() {
-                this.style.transform = 'scale(0.95)';
-            });
-            
-            document.querySelector('.button').addEventListener('touchend', function() {
-                this.style.transform = 'scale(1)';
-            });
+            }, 2000);
         };
 
         // 防止双击缩放
