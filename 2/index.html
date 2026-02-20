@@ -16,7 +16,8 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
             background: #000;
             min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
         }
 
@@ -64,7 +65,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 40px 20px;
             animation: fadeIn 2s ease-in;
         }
 
@@ -187,7 +188,8 @@
         .wishes-container {
             max-width: 90%;
             width: 600px;
-            margin-top: 40px;
+            margin: 40px auto 60px;
+            padding-bottom: 20px;
         }
 
         .wish-card {
@@ -386,9 +388,17 @@
 
         /* 响应式 */
         @media (max-width: 768px) {
+            .container {
+                padding: 30px 15px 80px;
+            }
+
             .title::before,
             .title::after {
                 font-size: 0.4em;
+            }
+
+            .wishes-container {
+                margin-bottom: 80px;
             }
 
             .music-btn {
@@ -397,6 +407,16 @@
                 font-size: 20px;
                 bottom: 20px;
                 right: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 10px 100px;
+            }
+
+            .wishes-container {
+                margin-bottom: 100px;
             }
         }
     </style>
@@ -441,11 +461,100 @@
 
     <div class="music-btn" onclick="toggleMusic()">🎵</div>
 
-    <audio id="bgMusic" loop>
-        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7v////////////////////////////////////////////////////////////////AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T0qhGGAAAAAAD/+xDEAAPAAAGkAAAAIAAANIAAAARMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
-    </audio>
-
     <script>
+        // 生日歌音符序列 (使用Web Audio API)
+        const birthdaySong = [
+            {note: 'G4', duration: 0.75},
+            {note: 'G4', duration: 0.25},
+            {note: 'A4', duration: 1},
+            {note: 'G4', duration: 1},
+            {note: 'C5', duration: 1},
+            {note: 'B4', duration: 2},
+            
+            {note: 'G4', duration: 0.75},
+            {note: 'G4', duration: 0.25},
+            {note: 'A4', duration: 1},
+            {note: 'G4', duration: 1},
+            {note: 'D5', duration: 1},
+            {note: 'C5', duration: 2},
+            
+            {note: 'G4', duration: 0.75},
+            {note: 'G4', duration: 0.25},
+            {note: 'G5', duration: 1},
+            {note: 'E5', duration: 1},
+            {note: 'C5', duration: 1},
+            {note: 'B4', duration: 1},
+            {note: 'A4', duration: 2},
+            
+            {note: 'F5', duration: 0.75},
+            {note: 'F5', duration: 0.25},
+            {note: 'E5', duration: 1},
+            {note: 'C5', duration: 1},
+            {note: 'D5', duration: 1},
+            {note: 'C5', duration: 2}
+        ];
+
+        const noteFrequencies = {
+            'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23,
+            'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
+            'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46,
+            'G5': 783.99, 'A5': 880.00, 'B5': 987.77
+        };
+
+        let audioContext;
+        let isPlaying = false;
+        let currentTimeout;
+
+        function playBirthdaySong() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            let currentTime = audioContext.currentTime;
+            const tempo = 0.4; // 每拍的秒数
+
+            birthdaySong.forEach((noteObj, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.value = noteFrequencies[noteObj.note];
+                oscillator.type = 'sine';
+
+                const startTime = currentTime;
+                const duration = noteObj.duration * tempo;
+
+                gainNode.gain.setValueAtTime(0, startTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+
+                oscillator.start(startTime);
+                oscillator.stop(startTime + duration);
+
+                currentTime += duration;
+            });
+
+            // 循环播放
+            const totalDuration = birthdaySong.reduce((sum, note) => sum + note.duration * tempo, 0);
+            currentTimeout = setTimeout(() => {
+                if (isPlaying) {
+                    playBirthdaySong();
+                }
+            }, totalDuration * 1000);
+        }
+
+        function stopBirthdaySong() {
+            if (currentTimeout) {
+                clearTimeout(currentTimeout);
+            }
+            if (audioContext) {
+                audioContext.close().then(() => {
+                    audioContext = null;
+                });
+            }
+        }
         // 粒子系统
         function createParticles() {
             const container = document.getElementById('particles');
@@ -566,26 +675,26 @@
 
         // 音乐控制
         let musicPlaying = false;
-        const audio = document.getElementById('bgMusic');
         
         function toggleMusic() {
             const btn = document.querySelector('.music-btn');
             musicPlaying = !musicPlaying;
+            isPlaying = musicPlaying;
             
             if (musicPlaying) {
-                audio.play().catch(e => console.log('音频播放需要用户交互'));
+                playBirthdaySong();
                 btn.classList.add('playing');
                 btn.textContent = '🎶';
             } else {
-                audio.pause();
+                stopBirthdaySong();
                 btn.classList.remove('playing');
                 btn.textContent = '🎵';
             }
         }
 
         // 自动播放音乐（需要用户交互）
-        document.addEventListener('click', function autoPlay() {
-            if (!musicPlaying) {
+        document.addEventListener('click', function autoPlay(e) {
+            if (!musicPlaying && !e.target.closest('.music-btn')) {
                 toggleMusic();
             }
             document.removeEventListener('click', autoPlay);
