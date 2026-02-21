@@ -282,6 +282,9 @@
         // 点击/触摸事件（添加节流）
         let lastClickTime = 0;
         const clickThrottle = isMobile ? 300 : 100;
+        let isMouseDown = false;
+        let lastDragTime = 0;
+        const dragThrottle = isMobile ? 100 : 50;
         
         function handleInteraction(e) {
             const now = Date.now();
@@ -296,10 +299,47 @@
             }
         }
         
+        function handleDrag(e) {
+            if (!isMouseDown) return;
+            
+            const now = Date.now();
+            if (now - lastDragTime < dragThrottle) return;
+            lastDragTime = now;
+            
+            const x = e.clientX || (e.touches && e.touches[0].clientX);
+            const y = e.clientY || (e.touches && e.touches[0].clientY);
+            
+            if (x && y) {
+                createNameExplosion(x, y);
+            }
+        }
+        
+        // 鼠标事件
         canvas.addEventListener('click', handleInteraction);
+        canvas.addEventListener('mousedown', (e) => {
+            isMouseDown = true;
+            handleInteraction(e);
+        });
+        canvas.addEventListener('mousemove', handleDrag);
+        canvas.addEventListener('mouseup', () => {
+            isMouseDown = false;
+        });
+        canvas.addEventListener('mouseleave', () => {
+            isMouseDown = false;
+        });
+        
+        // 触摸事件
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
+            isMouseDown = true;
             handleInteraction(e);
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            handleDrag(e);
+        });
+        canvas.addEventListener('touchend', () => {
+            isMouseDown = false;
         });
         
         // 窗口大小调整
