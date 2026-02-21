@@ -26,6 +26,8 @@
             width: 100%;
             height: 100%;
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            tap-highlight-color: transparent;
         }
 
         .content {
@@ -72,28 +74,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .hint {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: clamp(12px, 2vw, 16px);
-            color: #555;
-            animation: pulse 2s ease infinite;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
         @media (max-width: 768px) {
-            .hint {
-                bottom: 20px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -103,8 +84,6 @@
         <h1 class="name">KURBAN</h1>
         <p class="tagline">Click & Explore</p>
     </div>
-
-    <div class="hint">👆 点击屏幕创造粒子魔法</div>
 
     <script>
         const canvas = document.getElementById('canvas');
@@ -315,7 +294,10 @@
         }
         
         canvas.addEventListener('click', handleInteraction);
-        canvas.addEventListener('touchstart', handleInteraction);
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleInteraction(e);
+        });
         
         // 窗口大小调整
         window.addEventListener('resize', () => {
