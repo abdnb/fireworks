@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kurban - Developer & Creator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Kurban - Interactive Experience</title>
     <style>
         * {
             margin: 0;
@@ -15,74 +15,33 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #0a0a0a;
             color: #fff;
-            overflow-x: hidden;
+            overflow: hidden;
+            touch-action: none;
         }
 
-        .container {
-            min-height: 100vh;
-            position: relative;
-        }
-
-        /* 动态背景 */
-        .bg-animation {
+        canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 0;
-            overflow: hidden;
+            cursor: pointer;
         }
 
-        .bg-animation span {
-            position: absolute;
-            display: block;
-            width: 2px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.5);
-            animation: float 15s infinite;
-            border-radius: 50%;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(100px);
-                opacity: 0;
-            }
-        }
-
-        /* 主内容区 */
         .content {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        /* 名字展示 */
-        .name-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
-            margin-bottom: 60px;
+            z-index: 10;
+            pointer-events: none;
         }
 
         .name {
-            font-size: clamp(60px, 15vw, 180px);
+            font-size: clamp(50px, 12vw, 140px);
             font-weight: 900;
-            letter-spacing: -5px;
+            letter-spacing: clamp(-3px, -0.5vw, -5px);
             background: linear-gradient(45deg, #00ff88, #00d4ff, #ff00ff, #ffaa00);
             background-size: 300% 300%;
             -webkit-background-clip: text;
@@ -90,22 +49,7 @@
             background-clip: text;
             animation: gradient 8s ease infinite;
             text-transform: uppercase;
-            position: relative;
-            display: inline-block;
-        }
-
-        .name::before {
-            content: 'KURBAN';
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            background: linear-gradient(45deg, #00ff88, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: blur(20px);
-            opacity: 0.5;
+            text-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
         }
 
         @keyframes gradient {
@@ -115,10 +59,10 @@
         }
 
         .tagline {
-            font-size: clamp(18px, 3vw, 28px);
+            font-size: clamp(14px, 2.5vw, 22px);
             color: #888;
-            margin-top: 20px;
-            letter-spacing: 8px;
+            margin-top: 15px;
+            letter-spacing: clamp(3px, 1vw, 8px);
             text-transform: uppercase;
             animation: fadeIn 2s ease;
         }
@@ -128,202 +72,230 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 技能卡片 */
-        .skills {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            max-width: 1000px;
-            width: 100%;
-            margin-bottom: 60px;
-        }
-
-        .skill-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .skill-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .skill-card:hover::before {
-            left: 100%;
-        }
-
-        .skill-card:hover {
-            transform: translateY(-10px);
-            border-color: #00ff88;
-            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3);
-        }
-
-        .skill-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        .skill-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .skill-desc {
-            font-size: 14px;
-            color: #888;
-        }
-
-        /* 联系按钮 */
-        .contact-btn {
-            padding: 18px 50px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #0a0a0a;
-            background: linear-gradient(45deg, #00ff88, #00d4ff);
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .contact-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
+        .hint {
+            position: fixed;
+            bottom: 30px;
             left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+            transform: translateX(-50%);
+            font-size: clamp(12px, 2vw, 16px);
+            color: #555;
+            animation: pulse 2s ease infinite;
+            z-index: 10;
+            pointer-events: none;
         }
 
-        .contact-btn:hover::before {
-            width: 300px;
-            height: 300px;
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
-        .contact-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.5);
-        }
-
-        .contact-btn span {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 响应式 */
         @media (max-width: 768px) {
-            .name {
-                letter-spacing: -2px;
-            }
-            
-            .tagline {
-                letter-spacing: 4px;
-            }
-            
-            .skills {
-                grid-template-columns: 1fr;
-                gap: 20px;
+            .hint {
+                bottom: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 动态背景 -->
-        <div class="bg-animation" id="bgAnimation"></div>
-
-        <!-- 主内容 -->
-        <div class="content">
-            <div class="name-container">
-                <h1 class="name">KURBAN</h1>
-                <p class="tagline">Developer & Creator</p>
-            </div>
-
-            <div class="skills">
-                <div class="skill-card">
-                    <div class="skill-icon">⚡</div>
-                    <div class="skill-title">Fast</div>
-                    <div class="skill-desc">极致性能优化</div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🎨</div>
-                    <div class="skill-title">Creative</div>
-                    <div class="skill-desc">创意无限设计</div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🚀</div>
-                    <div class="skill-title">Innovative</div>
-                    <div class="skill-desc">前沿技术探索</div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">💎</div>
-                    <div class="skill-title">Quality</div>
-                    <div class="skill-desc">精益求精品质</div>
-                </div>
-            </div>
-
-            <button class="contact-btn" onclick="handleContact()">
-                <span>Get In Touch</span>
-            </button>
-        </div>
+    <canvas id="canvas"></canvas>
+    
+    <div class="content">
+        <h1 class="name">KURBAN</h1>
+        <p class="tagline">Click & Explore</p>
     </div>
 
+    <div class="hint">👆 点击屏幕创造粒子魔法</div>
+
     <script>
-        // 生成动态背景粒子
-        const bgAnimation = document.getElementById('bgAnimation');
-        for (let i = 0; i < 50; i++) {
-            const span = document.createElement('span');
-            span.style.left = Math.random() * 100 + '%';
-            span.style.animationDelay = Math.random() * 15 + 's';
-            span.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            bgAnimation.appendChild(span);
-        }
-
-        // 鼠标跟随效果
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        
+        const particles = [];
+        const nameParticles = [];
+        const colors = ['#00ff88', '#00d4ff', '#ff00ff', '#ffaa00'];
+        
+        // 粒子类
+        class Particle {
+            constructor(x, y, isName = false) {
+                this.x = x;
+                this.y = y;
+                this.size = isName ? Math.random() * 3 + 2 : Math.random() * 2 + 1;
+                this.speedX = (Math.random() - 0.5) * (isName ? 8 : 4);
+                this.speedY = (Math.random() - 0.5) * (isName ? 8 : 4);
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.life = 1;
+                this.decay = isName ? 0.015 : 0.02;
+                this.isName = isName;
+            }
             
-            document.querySelector('.name').style.transform = 
-                `perspective(1000px) rotateY(${(x - 0.5) * 10}deg) rotateX(${(y - 0.5) * -10}deg)`;
-        });
-
-        // 联系按钮点击
-        function handleContact() {
-            alert('联系方式：\n\n📧 Email: kurban@example.com\n💼 GitHub: github.com/kurban\n🐦 Twitter: @kurban');
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedX *= 0.98;
+                this.speedY *= 0.98;
+                this.life -= this.decay;
+                this.size *= 0.99;
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = this.isName ? 20 : 10;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
         }
-
-        // 技能卡片点击效果
-        document.querySelectorAll('.skill-card').forEach(card => {
-            card.addEventListener('click', function() {
-                this.style.animation = 'none';
-                setTimeout(() => {
-                    this.style.animation = '';
-                }, 10);
+        
+        // 连接线粒子
+        class ConnectionParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            
+            draw() {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        // 初始化背景粒子
+        for (let i = 0; i < 80; i++) {
+            particles.push(new ConnectionParticle(
+                Math.random() * width,
+                Math.random() * height
+            ));
+        }
+        
+        // 创建名字粒子爆炸
+        function createNameExplosion(x, y) {
+            const text = 'KURBAN';
+            const particleCount = 100;
+            
+            for (let i = 0; i < particleCount; i++) {
+                nameParticles.push(new Particle(x, y, true));
+            }
+            
+            // 创建文字粒子
+            ctx.font = 'bold 60px Arial';
+            ctx.fillStyle = '#fff';
+            const textWidth = ctx.measureText(text).width;
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = textWidth + 20;
+            tempCanvas.height = 80;
+            tempCtx.font = 'bold 60px Arial';
+            tempCtx.fillStyle = '#fff';
+            tempCtx.fillText(text, 10, 60);
+            
+            const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+            const pixels = imageData.data;
+            
+            for (let y = 0; y < tempCanvas.height; y += 3) {
+                for (let x = 0; x < tempCanvas.width; x += 3) {
+                    const index = (y * tempCanvas.width + x) * 4;
+                    if (pixels[index + 3] > 128) {
+                        const particle = new Particle(
+                            x - tempCanvas.width / 2,
+                            y - 40,
+                            true
+                        );
+                        particle.x += width / 2;
+                        particle.y += height / 2;
+                        particle.speedX = (Math.random() - 0.5) * 3;
+                        particle.speedY = (Math.random() - 0.5) * 3;
+                        nameParticles.push(particle);
+                    }
+                }
+            }
+        }
+        
+        // 绘制连接线
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 150) {
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance / 150)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        // 动画循环
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+            ctx.fillRect(0, 0, width, height);
+            
+            // 更新和绘制背景粒子
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
             });
+            
+            drawConnections();
+            
+            // 更新和绘制名字粒子
+            for (let i = nameParticles.length - 1; i >= 0; i--) {
+                nameParticles[i].update();
+                nameParticles[i].draw();
+                
+                if (nameParticles[i].life <= 0) {
+                    nameParticles.splice(i, 1);
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // 点击/触摸事件
+        function handleInteraction(e) {
+            const x = e.clientX || (e.touches && e.touches[0].clientX);
+            const y = e.clientY || (e.touches && e.touches[0].clientY);
+            
+            if (x && y) {
+                createNameExplosion(x, y);
+            }
+        }
+        
+        canvas.addEventListener('click', handleInteraction);
+        canvas.addEventListener('touchstart', handleInteraction);
+        
+        // 窗口大小调整
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
         });
+        
+        animate();
     </script>
 </body>
 </html>
